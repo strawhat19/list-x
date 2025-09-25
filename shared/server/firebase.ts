@@ -1,8 +1,8 @@
-import { User } from '../models/User';
-import { initializeApp } from 'firebase/app';
-import { ItemType, TaskType, Views } from '../types/types';
 import { colors, detectIfNameIsColor, isLightColor } from '@/components/theme/Themed';
+import { initializeApp } from 'firebase/app';
 import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { User } from '../models/User';
+import { ItemType, TaskType, Views } from '../types/types';
 import { camelCaseToTitleCase, defaultBoardID, findHighestNumberInArrayByKey, genID, hapticFeedback, isValid, logMsgLine } from '../variables';
 
 export enum Environments {
@@ -47,11 +47,11 @@ export const tasksDatabaseCollection = environment + DatabaseTableNames.tasks;
 export const metricsDatabaseCollection = environment + DatabaseTableNames.metrics;
 
 export const getItemsForColumn = (items: ItemType[], listID: string) => (
-  items && items?.length > 0 ? items?.filter(itm => itm?.listID == listID).sort((a, b) => a?.index - b?.index) : []
+  items && items?.length > 0 ? items?.filter(itm => itm?.listID == listID).sort((a: any, b: any) => a?.index - b?.index) : []
 );
 
 export const getTasksForItem = (tasks: TaskType[], itemID: string) => (
-  tasks && tasks?.length > 0 ? tasks?.filter(tsk => tsk?.itemID == itemID).sort((a, b) => a?.index - b?.index) : []
+  tasks && tasks?.length > 0 ? tasks?.filter(tsk => tsk?.itemID == itemID).sort((a: any, b: any) => a?.index - b?.index) : []
 );
 
 export const userConverter = {
@@ -196,8 +196,8 @@ export const prepareTaskForDatabase = async (tsk: TaskType, tasks: TaskType[], i
 
   let highestKey = await findHighestNumberInArrayByKey(tasks, `key`);
   let highestIndex = await findHighestNumberInArrayByKey(tasks, `index`);
-  let highestCount = await findHighestNumberInArrayByKey(tasks, `count`);
-  let highestColumnIndex = await findHighestNumberInArrayByKey(tasksForItem, `index`);
+  let highestCount: any = await findHighestNumberInArrayByKey(tasks, `count`);
+  let highestColumnIndex: any = await findHighestNumberInArrayByKey(tasksForItem, `index`);
 
   const maxHighest = Math.max(highestKey ?? -Infinity, highestIndex ?? -Infinity);
 
@@ -237,9 +237,9 @@ export const prepareItemForDatabase = async (itm: ItemType, items: ItemType[], l
   let newIndex = itemsForColumn?.length + 1;
 
   let highestKey = await findHighestNumberInArrayByKey(items, `key`);
-  let highestCount = await findHighestNumberInArrayByKey(items, `count`);
-  let highestIndex = await findHighestNumberInArrayByKey(items, `index`);
-  let highestColumnIndex = await findHighestNumberInArrayByKey(itemsForColumn, `index`);
+  let highestCount: any = await findHighestNumberInArrayByKey(items, `count`);
+  let highestIndex: any = await findHighestNumberInArrayByKey(items, `index`);
+  let highestColumnIndex: any = await findHighestNumberInArrayByKey(itemsForColumn, `index`);
 
   const maxHighest = Math.max(highestKey ?? -Infinity, highestIndex ?? -Infinity);
 
@@ -264,7 +264,7 @@ export const prepareItemForDatabase = async (itm: ItemType, items: ItemType[], l
   return preparedItem;
 }
 
-export const createItem = async (columnItems, listID: string, name, items, closeBottomSheet, shouldCloseBottomSheet = true, user: User) => {
+export const createItem = async (columnItems: any, listID: string, name: any, items: any, closeBottomSheet: any, shouldCloseBottomSheet = true, user: User) => {
   if (listID && isValid(listID)) {
     name = name.trim().replace(/\s+/g, ` `);
     
@@ -296,9 +296,9 @@ export const createItem = async (columnItems, listID: string, name, items, close
       description: ``,
       backgroundColor,
       boardID: defaultBoardID,
-      color: camelCaseToTitleCase(colorKey),
+      color: camelCaseToTitleCase(colorKey as any),
       ...(isLightBGColor && { fontColor: colors.darkFont }),
-    } as ItemType);
+    } as ItemType | any);
 
     const newItem = await prepareItemForDatabase(itemToAdd, items, listID);
     await addItemToDatabase(newItem);

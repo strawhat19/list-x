@@ -73,7 +73,7 @@ export default function Slider({ backgroundColor = colors.transparent }: any) {
     return (
         web() ? (
             <div>Hello</div>
-        ) : user == null ? <>
+        ) : user != null ? <>
             <Text>
                 User is Null
             </Text>

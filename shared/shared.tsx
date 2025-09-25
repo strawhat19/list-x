@@ -136,6 +136,7 @@ export default function Shared({ children }: { children: React.ReactNode; }) {
 
   useEffect(() => {
     console.log(`from shared`, {setUser});
+    setUser(defaultUser);
   }, [])
 
   useEffect(() => {    
